@@ -78,7 +78,7 @@ _setupModel(){
 ```        
 ### part3
 
-![image](https://github.com/qkrgudals1030/material.md/assets/50895124/117d33d8-6bce-45f2-9eb7-140a283e4723)
+![image](https://github.com/qkrgudals1030/material.md/assets/50895124/c6ceac06-49fe-4096-a439-5d0f1e4060ba)
 
 ### part3 코드 변경 부분
 ```
