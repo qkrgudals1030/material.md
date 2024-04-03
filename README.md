@@ -99,30 +99,82 @@ const textureLoader = new THREE.TextureLoader();
 ### part4
 ![image](https://github.com/qkrgudals1030/material.md/assets/50895124/60288c80-045a-4041-818b-161fdb370c8a)
 
+![image](https://github.com/qkrgudals1030/material.md/assets/50895124/4248d502-7ef1-4b96-a727-a6507cb98a92)
+
+
 ### part4 코드 변경 부분
 
 ```
-_setupModel(){
+_setupCamera(){
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            100
+        );
+        camera.position.z = 3;
+        this._camera = camera;    
+        this._scene.add(camera);
+    }
+    _setupLight(){
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        this._scene.add(ambientLight);
+
+        const color = 0xffffff;
+        const intensity = 1;
+        const light = new THREE.DirectionalLight(color, intensity);
+        light.position.set(-1, 2, 4);
+        //this._scene.add(light);
+        this._camera.add(light);
+    }
+    _setupModel(){
         const textureLoader = new THREE.TextureLoader();
         const map = textureLoader.load("images/glass/Glass_Window_002_basecolor.jpg");
-        const mapA0 = textureLoader.load("images/glass/Glass_Window_002_ambientOcclusion.jpg");
+        const mapAO = textureLoader.load("images/glass/Glass_Window_002_ambientOcclusion.jpg");
         const mapHeight = textureLoader.load("images/glass/Glass_Window_002_height.png");
-        const mapNormal = textureLoader.load("images/hlass/Glass_Window_002_normal.jpg");
+        const mapNormal = textureLoader.load("images/glass/Glass_Window_002_normal.jpg");
         const mapRoughness = textureLoader.load("images/glass/Glass_Window_002_roughness.jpg");
         const mapMetalic = textureLoader.load("images/glass/Glass_Window_002_metallic.jpg");
-        const mapAlpha = textureLoader.load("imagess/glass/Glass_Window_002_opacity.jpg");
-
+        const mapAlpha = textureLoader.load("images/glass/Glass_Window_002_opacity.jpg");
+        const mapLight = textureLoader.load("images/glass/light.jpg");
         const material = new THREE.MeshStandardMaterial({
-            map: map
+            map: map,
+            normalMap: mapNormal,
+
+            displacementMap: mapHeight,
+            displacementScale: 0.2,
+            displacementBias: -0.15,
+
+            aoMap: mapAO,
+            aoMapIntensity: 1,
+
+            roughnessMap: mapRoughness,
+            roughness: 0.5,
+
+            metalnessMap: mapMetalic,
+            metalness: 0.5,
+
+            //alphaMap: mapAlpha,
+            transparent: true,
+            side: THREE.DoubleSide,
+
+            lightMap: mapLight,
+            lightMapIntensity: 2,
         });
 
-        const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+        const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1, 256, 256, 256), material);
         box.position.set(-1, 0, 0);
+        box.geometry.attributes.uv2 = box.geometry.attributes.uv;
         this._scene.add(box);
 
-        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 32), material);
+        
+
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.7, 512, 512), material);
         sphere.position.set(1, 0, 0);
+        sphere.geometry.attributes.uv2 = sphere.geometry.attributes.uv;
         this._scene.add(sphere);
+
+        
     }
 ```
 
